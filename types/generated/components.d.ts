@@ -1,5 +1,42 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface RouteCountry extends Struct.ComponentSchema {
+  collectionName: 'components_route_country';
+  info: {
+    description: '';
+    displayName: 'country';
+    icon: 'pinMap';
+  };
+  attributes: {
+    countries: Schema.Attribute.Relation<'oneToMany', 'api::country.country'>;
+  };
+}
+
+export interface RouteDestination extends Struct.ComponentSchema {
+  collectionName: 'components_route_destination';
+  info: {
+    displayName: 'destination';
+    icon: 'pinMap';
+  };
+  attributes: {
+    destinations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::destination.destination'
+    >;
+  };
+}
+
+export interface SharedFromLocation extends Struct.ComponentSchema {
+  collectionName: 'components_shared_from_locations';
+  info: {
+    displayName: 'From Location';
+  };
+  attributes: {
+    airports: Schema.Attribute.Relation<'oneToMany', 'api::airport.airport'>;
+    countries: Schema.Attribute.Relation<'oneToMany', 'api::country.country'>;
+  };
+}
+
 export interface SharedMedia extends Struct.ComponentSchema {
   collectionName: 'components_shared_media';
   info: {
@@ -62,14 +99,36 @@ export interface SharedSlider extends Struct.ComponentSchema {
   };
 }
 
+export interface VehicleTypeVehiclePrices extends Struct.ComponentSchema {
+  collectionName: 'components_vehicle_type_vehicle_prices';
+  info: {
+    description: '';
+    displayName: 'vehicle';
+  };
+  attributes: {
+    currency: Schema.Attribute.Enumeration<['EUR', 'USD', 'GBP']>;
+    price: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<5>;
+    vehicle_type: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::vehicle-type.vehicle-type'
+    >;
+  };
+}
+
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'route.country': RouteCountry;
+      'route.destination': RouteDestination;
+      'shared.from-location': SharedFromLocation;
       'shared.media': SharedMedia;
       'shared.quote': SharedQuote;
       'shared.rich-text': SharedRichText;
       'shared.seo': SharedSeo;
       'shared.slider': SharedSlider;
+      'vehicle-type.vehicle-prices': VehicleTypeVehiclePrices;
     }
   }
 }

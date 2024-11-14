@@ -4,7 +4,8 @@
   "info": {
     "singularName": "destination",
     "pluralName": "destinations",
-    "displayName": "Destination"
+    "displayName": "Destination",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -45,32 +46,32 @@
       "unique": true
     },
     "Thumbnail": {
-      "allowedTypes": [
-        "images",
-        "files"
-      ],
       "type": "media",
       "multiple": false,
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "required": false
-    },
-    "Images": {
+      "required": false,
       "allowedTypes": [
         "images",
         "files"
       ],
-      "type": "media",
-      "multiple": true,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
-      },
-      "required": true
+      }
+    },
+    "Images": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files"
+      ],
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     },
     "country": {
       "type": "relation",
@@ -91,6 +92,12 @@
       ],
       "required": true,
       "default": "Active"
+    },
+    "routes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::route.route",
+      "mappedBy": "destination"
     }
   }
 }

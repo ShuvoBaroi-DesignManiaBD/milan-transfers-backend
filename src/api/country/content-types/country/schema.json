@@ -24,10 +24,9 @@
     "Thumbnail": {
       "type": "media",
       "multiple": false,
-      "required": true,
+      "required": false,
       "allowedTypes": [
-        "images",
-        "files"
+        "images"
       ]
     },
     "Images": {
@@ -59,6 +58,12 @@
       "relation": "oneToMany",
       "target": "api::destination.destination",
       "mappedBy": "country"
+    },
+    "routes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::route.route",
+      "mappedBy": "to_country"
     }
   }
 }

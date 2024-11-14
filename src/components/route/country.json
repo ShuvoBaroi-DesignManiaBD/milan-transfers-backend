@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_route_country",
+  "info": {
+    "displayName": "country",
+    "icon": "pinMap",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "countries": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::country.country"
+    }
+  }
+}

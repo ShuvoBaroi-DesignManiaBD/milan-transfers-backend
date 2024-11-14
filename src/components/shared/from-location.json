@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_shared_from_locations",
+  "info": {
+    "displayName": "From Location"
+  },
+  "options": {},
+  "attributes": {
+    "countries": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::country.country"
+    },
+    "airports": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::airport.airport"
+    }
+  }
+}

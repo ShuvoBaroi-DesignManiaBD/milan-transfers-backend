@@ -4,7 +4,8 @@
   "info": {
     "singularName": "feature",
     "pluralName": "features",
-    "displayName": "Feature"
+    "displayName": "Feature",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -53,6 +54,18 @@
       "relation": "manyToMany",
       "target": "api::vehicle-type.vehicle-type",
       "mappedBy": "features"
+    },
+    "icon": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     }
   }
 }

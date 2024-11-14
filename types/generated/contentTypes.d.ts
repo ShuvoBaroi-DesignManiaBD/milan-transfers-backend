@@ -454,6 +454,7 @@ export interface ApiAirportAirport extends Struct.CollectionTypeSchema {
         };
       }>;
     publishedAt: Schema.Attribute.DateTime;
+    routes: Schema.Attribute.Relation<'oneToMany', 'api::route.route'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -523,8 +524,8 @@ export interface ApiCountryCountry extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
-    Thumbnail: Schema.Attribute.Media<'images' | 'files'> &
-      Schema.Attribute.Required;
+    routes: Schema.Attribute.Relation<'oneToMany', 'api::route.route'>;
+    Thumbnail: Schema.Attribute.Media<'images'>;
     Title: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
@@ -537,6 +538,7 @@ export interface ApiCountryCountry extends Struct.CollectionTypeSchema {
 export interface ApiDestinationDestination extends Struct.CollectionTypeSchema {
   collectionName: 'destinations';
   info: {
+    description: '';
     displayName: 'Destination';
     pluralName: 'destinations';
     singularName: 'destination';
@@ -578,7 +580,6 @@ export interface ApiDestinationDestination extends Struct.CollectionTypeSchema {
       }> &
       Schema.Attribute.DefaultTo<'Active'>;
     Images: Schema.Attribute.Media<'images' | 'files', true> &
-      Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -590,6 +591,7 @@ export interface ApiDestinationDestination extends Struct.CollectionTypeSchema {
       'api::destination.destination'
     >;
     publishedAt: Schema.Attribute.DateTime;
+    routes: Schema.Attribute.Relation<'oneToMany', 'api::route.route'>;
     Thumbnail: Schema.Attribute.Media<'images' | 'files'> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -613,6 +615,7 @@ export interface ApiDestinationDestination extends Struct.CollectionTypeSchema {
 export interface ApiFeatureFeature extends Struct.CollectionTypeSchema {
   collectionName: 'features';
   info: {
+    description: '';
     displayName: 'Feature';
     pluralName: 'features';
     singularName: 'feature';
@@ -644,6 +647,12 @@ export interface ApiFeatureFeature extends Struct.CollectionTypeSchema {
         };
       }> &
       Schema.Attribute.DefaultTo<'Active'>;
+    icon: Schema.Attribute.Media<'images', true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -703,6 +712,7 @@ export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
 export interface ApiRouteRoute extends Struct.CollectionTypeSchema {
   collectionName: 'routes';
   info: {
+    description: '';
     displayName: 'Route';
     pluralName: 'routes';
     singularName: 'route';
@@ -716,22 +726,41 @@ export interface ApiRouteRoute extends Struct.CollectionTypeSchema {
     };
   };
   attributes: {
-    Country_From: Schema.Attribute.DynamicZone<['country.country']> &
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    destination: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::destination.destination'
+    >;
+    from_airport: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::airport.airport'
+    >;
+    from_country: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::country.country'
+    >;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::route.route'>;
+    publishedAt: Schema.Attribute.DateTime;
+    Title: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    to_country: Schema.Attribute.Relation<'manyToOne', 'api::country.country'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    vehicles: Schema.Attribute.DynamicZone<['vehicle-type.vehicle-prices']> &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
         };
       }>;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    locale: Schema.Attribute.String;
-    localizations: Schema.Attribute.Relation<'oneToMany', 'api::route.route'>;
-    publishedAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
   };
 }
 

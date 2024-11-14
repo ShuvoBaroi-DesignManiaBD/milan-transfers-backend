@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_vehicle_type_vehicle_prices",
+  "info": {
+    "displayName": "vehicle",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "vehicle_type": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::vehicle-type.vehicle-type"
+    },
+    "price": {
+      "type": "integer",
+      "required": true,
+      "default": 5
+    },
+    "currency": {
+      "type": "enumeration",
+      "enum": [
+        "EUR",
+        "USD",
+        "GBP"
+      ]
+    }
+  }
+}

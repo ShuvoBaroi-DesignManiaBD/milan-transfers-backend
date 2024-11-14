@@ -64,6 +64,12 @@
       "relation": "manyToOne",
       "target": "api::country.country",
       "inversedBy": "airports"
+    },
+    "routes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::route.route",
+      "mappedBy": "from_airport"
     }
   }
 }
