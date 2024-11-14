@@ -441,6 +441,12 @@ export interface ApiAirportAirport extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
+    full_name: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -821,14 +827,14 @@ export interface ApiVehicleTypeVehicleType extends Struct.CollectionTypeSchema {
         };
       }> &
       Schema.Attribute.DefaultTo<1>;
-    Pax: Schema.Attribute.Integer &
+    pax: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
         };
       }> &
-      Schema.Attribute.DefaultTo<1>;
+      Schema.Attribute.DefaultTo<'1-3 pax'>;
     publishedAt: Schema.Attribute.DateTime;
     Thumbnail: Schema.Attribute.Media<'images'> &
       Schema.Attribute.Required &
