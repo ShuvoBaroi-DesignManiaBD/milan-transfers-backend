@@ -59,6 +59,26 @@
         }
       },
       "type": "string"
+    },
+    "distance_km": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "decimal",
+      "required": true,
+      "default": 1
+    },
+    "duration": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string",
+      "required": true,
+      "default": "1h"
     }
   }
 }

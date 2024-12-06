@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = ({ env }) => {
-  const client = env('DATABASE_CLIENT', 'sqlite');
+  const client = env('DATABASE_CLIENT', 'mysql');
 
   // console.log(env('DATABASE_HOST', 'localhost'));
   // console.log(env('DATABASE_PASSWORD', 'strapi'));

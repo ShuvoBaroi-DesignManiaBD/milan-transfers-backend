@@ -60,15 +60,17 @@ const config = {
     // Extend the translations
     translations: {
         en: {
-            "app.components.LeftMenu.navbrand.title": "Riga Transfer Dashboard",
+            "app.components.LeftMenu.navbrand.title": "Bergamo Transfer Dashboard. A car transfer site for Bergamo. ",
 
-            "app.components.LeftMenu.navbrand.workplace": "Testing",
+            "app.components.LeftMenu.navbrand.workplace": "Bergamo Transfer Dashboard",
 
-            "Auth.form.welcome.title": "Welcome to Riga Transfer",
+            "Auth.form.welcome.title": "",
 
             "Auth.form.welcome.subtitle": "Login to your account",
 
-            "Settings.profile.form.section.experience.interfaceLanguageHelp": "Preference changes will apply only to you.",
+            "Auth.title": "Bergamo Transfer Dashboard",
+
+            "Settings.profile.form.section.experience.interfaceLanguageHelp": "Preference changes will apply only to you. Other users of this account will not be affected. You can change your preference at any time.",
         },
     },
 };

@@ -739,6 +739,22 @@ export interface ApiRouteRoute extends Struct.CollectionTypeSchema {
       'manyToOne',
       'api::destination.destination'
     >;
+    distance_km: Schema.Attribute.Decimal &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<1>;
+    duration: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'1h'>;
     from_airport: Schema.Attribute.Relation<
       'manyToOne',
       'api::airport.airport'
