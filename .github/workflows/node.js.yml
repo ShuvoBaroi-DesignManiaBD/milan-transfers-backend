@@ -15,6 +15,10 @@ jobs:
         node-version: [18.x] # Use a valid Node.js version
     env:
         ADMIN_JWT_SECRET: ${{ secrets.ADMIN_JWT_SECRET }}
+        APP_KEYS: ${{ secrets.APP_KEYS }}
+        API_TOKEN_SALT: ${{ secrets.API_TOKEN_SALT }}
+        PORT: ${{ secrets.PORT }}
+        HOST: ${{ secrets.HOST }}
         TRANSFER_TOKEN_SALT: ${{ secrets.TRANSFER_TOKEN_SALT }}
         DATABASE_CLIENT: ${{ secrets.DATABASE_CLIENT }}
         DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
