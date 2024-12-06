@@ -1,0 +1,77 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    strategy:
+      matrix:
+        node-version: [18.x] # Use a valid Node.js version
+    env:
+        ADMIN_JWT_SECRET: ${{ secrets.ADMIN_JWT_SECRET }}
+        TRANSFER_TOKEN_SALT: ${{ secrets.TRANSFER_TOKEN_SALT }}
+        DATABASE_CLIENT: ${{ secrets.DATABASE_CLIENT }}
+        DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+        DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+        DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+        DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+        DATABASE_SSL: ${{ secrets.DATABASE_SSL }}
+        DATABASE_FILENAME: ${{ secrets.DATABASE_FILENAME }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+       
+    steps:
+    - name: Debug User and Permissions
+      run: |
+        echo "Running as user: $(whoami)"
+        ls -ld /home/bergamo_transfer_backend/actions-runner/_work/bergamo-transfer-backend
+        ls -l /home/bergamo_transfer_backend/actions-runner/_work/bergamo-transfer-backend
+
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'pnpm'
+
+    - name: Install pnpm
+      run: npm install -g pnpm
+
+    - name: Install Dependencies
+      run: pnpm i
+
+    - name: Debug Secrets
+      run: |
+        echo "ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}"
+        echo "TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}"
+        echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}"
+      shell: bash
+
+    - name: Build
+      run: pnpm build
+      env:
+        ADMIN_JWT_SECRET: ${{ secrets.ADMIN_JWT_SECRET }}
+        TRANSFER_TOKEN_SALT: ${{ secrets.TRANSFER_TOKEN_SALT }}
+        DATABASE_CLIENT: ${{ secrets.DATABASE_CLIENT }}
+        DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+        DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+        DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+        DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+        DATABASE_SSL: ${{ secrets.DATABASE_SSL }}
+        DATABASE_FILENAME: ${{ secrets.DATABASE_FILENAME }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+    - name: List PM2 Processes
+      run: pm2 list
+
+    - name: Restart Application
+      run: pm2 restart 0
+      working-directory: /home/bergamo_transfer_backend/actions-runner/_work/bergamo-transfer-backend/bergamo-transfer-backend
