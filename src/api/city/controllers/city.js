@@ -1,10 +1,9 @@
 'use strict';
 
 /**
- * route controller
+ * city controller
  */
 
 const { createCoreController } = require('@strapi/strapi').factories;
 
-module.exports = createCoreController('api::route.route');
-
+module.exports = createCoreController('api::city.city');

@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_route_locations",
+  "info": {
+    "displayName": "airport",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "airport": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::airport.airport"
+    }
+  }
+}

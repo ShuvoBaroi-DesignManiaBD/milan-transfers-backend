@@ -498,6 +498,40 @@ export interface ApiAuthorAuthor extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCityCity extends Struct.CollectionTypeSchema {
+  collectionName: 'cities';
+  info: {
+    description: '';
+    displayName: 'city';
+    pluralName: 'cities';
+    singularName: 'city';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    cityStatus: Schema.Attribute.Enumeration<['active', 'inactive']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'active'>;
+    code: Schema.Attribute.String & Schema.Attribute.Required;
+    country: Schema.Attribute.Relation<'oneToOne', 'api::country.country'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.RichText & Schema.Attribute.Required;
+    images: Schema.Attribute.Media<'images', true>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::city.city'> &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    thumbnail: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiCountryCountry extends Struct.CollectionTypeSchema {
   collectionName: 'countries';
   info: {
@@ -747,6 +781,14 @@ export interface ApiRouteRoute extends Struct.CollectionTypeSchema {
         };
       }> &
       Schema.Attribute.DefaultTo<1>;
+    dropoff: Schema.Attribute.DynamicZone<
+      ['route.destination', 'route.location']
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     duration: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -765,6 +807,14 @@ export interface ApiRouteRoute extends Struct.CollectionTypeSchema {
     >;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::route.route'>;
+    pickup: Schema.Attribute.DynamicZone<
+      ['route.location', 'route.destination']
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     publishedAt: Schema.Attribute.DateTime;
     Title: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
@@ -1393,6 +1443,7 @@ declare module '@strapi/strapi' {
       'api::about.about': ApiAboutAbout;
       'api::airport.airport': ApiAirportAirport;
       'api::author.author': ApiAuthorAuthor;
+      'api::city.city': ApiCityCity;
       'api::country.country': ApiCountryCountry;
       'api::destination.destination': ApiDestinationDestination;
       'api::feature.feature': ApiFeatureFeature;

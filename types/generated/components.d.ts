@@ -15,14 +15,23 @@ export interface RouteCountry extends Struct.ComponentSchema {
 export interface RouteDestination extends Struct.ComponentSchema {
   collectionName: 'components_route_destination';
   info: {
-    displayName: 'destination';
+    description: '';
+    displayName: 'city';
     icon: 'pinMap';
   };
   attributes: {
-    destinations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::destination.destination'
-    >;
+    city: Schema.Attribute.Relation<'oneToOne', 'api::city.city'>;
+  };
+}
+
+export interface RouteLocation extends Struct.ComponentSchema {
+  collectionName: 'components_route_locations';
+  info: {
+    description: '';
+    displayName: 'airport';
+  };
+  attributes: {
+    airport: Schema.Attribute.Relation<'oneToOne', 'api::airport.airport'>;
   };
 }
 
@@ -122,6 +131,7 @@ declare module '@strapi/strapi' {
     export interface ComponentSchemas {
       'route.country': RouteCountry;
       'route.destination': RouteDestination;
+      'route.location': RouteLocation;
       'shared.from-location': SharedFromLocation;
       'shared.media': SharedMedia;
       'shared.quote': SharedQuote;

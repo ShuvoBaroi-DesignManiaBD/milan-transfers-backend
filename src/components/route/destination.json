@@ -1,15 +1,16 @@
 {
   "collectionName": "components_route_destination",
   "info": {
-    "displayName": "destination",
-    "icon": "pinMap"
+    "displayName": "city",
+    "icon": "pinMap",
+    "description": ""
   },
   "options": {},
   "attributes": {
-    "destinations": {
+    "city": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::destination.destination"
+      "relation": "oneToOne",
+      "target": "api::city.city"
     }
   }
 }

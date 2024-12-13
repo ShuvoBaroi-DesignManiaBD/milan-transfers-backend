@@ -79,6 +79,30 @@
       "type": "string",
       "required": true,
       "default": "1h"
+    },
+    "pickup": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "dynamiczone",
+      "components": [
+        "route.location",
+        "route.destination"
+      ]
+    },
+    "dropoff": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "dynamiczone",
+      "components": [
+        "route.destination",
+        "route.location"
+      ]
     }
   }
 }
