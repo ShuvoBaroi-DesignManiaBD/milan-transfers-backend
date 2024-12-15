@@ -460,7 +460,6 @@ export interface ApiAirportAirport extends Struct.CollectionTypeSchema {
         };
       }>;
     publishedAt: Schema.Attribute.DateTime;
-    routes: Schema.Attribute.Relation<'oneToMany', 'api::route.route'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -631,7 +630,6 @@ export interface ApiDestinationDestination extends Struct.CollectionTypeSchema {
       'api::destination.destination'
     >;
     publishedAt: Schema.Attribute.DateTime;
-    routes: Schema.Attribute.Relation<'oneToMany', 'api::route.route'>;
     Thumbnail: Schema.Attribute.Media<'images' | 'files'> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -769,10 +767,6 @@ export interface ApiRouteRoute extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    destination: Schema.Attribute.Relation<
-      'manyToOne',
-      'api::destination.destination'
-    >;
     distance_km: Schema.Attribute.Decimal &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -797,10 +791,6 @@ export interface ApiRouteRoute extends Struct.CollectionTypeSchema {
         };
       }> &
       Schema.Attribute.DefaultTo<'1h'>;
-    from_airport: Schema.Attribute.Relation<
-      'manyToOne',
-      'api::airport.airport'
-    >;
     from_country: Schema.Attribute.Relation<
       'manyToOne',
       'api::country.country'
@@ -816,6 +806,12 @@ export interface ApiRouteRoute extends Struct.CollectionTypeSchema {
         };
       }>;
     publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     Title: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
         i18n: {

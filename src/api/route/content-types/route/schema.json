@@ -22,22 +22,10 @@
       "target": "api::country.country",
       "inversedBy": "routes"
     },
-    "from_airport": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::airport.airport",
-      "inversedBy": "routes"
-    },
     "to_country": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::country.country",
-      "inversedBy": "routes"
-    },
-    "destination": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::destination.destination",
       "inversedBy": "routes"
     },
     "vehicles": {
@@ -103,6 +91,16 @@
         "route.destination",
         "route.location"
       ]
+    },
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.seo"
     }
   }
 }
