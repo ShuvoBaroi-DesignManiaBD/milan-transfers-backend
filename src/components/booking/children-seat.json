@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_booking_children_seats",
+  "info": {
+    "displayName": "children_seat"
+  },
+  "options": {},
+  "attributes": {
+    "age": {
+      "type": "integer",
+      "required": false
+    }
+  }
+}

@@ -1,5 +1,15 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface BookingChildrenSeat extends Struct.ComponentSchema {
+  collectionName: 'components_booking_children_seats';
+  info: {
+    displayName: 'children_seat';
+  };
+  attributes: {
+    age: Schema.Attribute.Integer;
+  };
+}
+
 export interface RouteCountry extends Struct.ComponentSchema {
   collectionName: 'components_route_country';
   info: {
@@ -129,6 +139,7 @@ export interface VehicleTypeVehiclePrices extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'booking.children-seat': BookingChildrenSeat;
       'route.country': RouteCountry;
       'route.destination': RouteDestination;
       'route.location': RouteLocation;
