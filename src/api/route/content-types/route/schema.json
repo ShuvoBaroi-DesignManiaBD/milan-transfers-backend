@@ -46,7 +46,9 @@
           "localized": true
         }
       },
-      "type": "string"
+      "type": "string",
+      "unique": true,
+      "required": true
     },
     "distance_km": {
       "pluginOptions": {
