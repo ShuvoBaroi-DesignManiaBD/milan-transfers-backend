@@ -1106,6 +1106,12 @@ export interface ApiVehicleTypeVehicleType extends Struct.CollectionTypeSchema {
         };
       }>;
     features: Schema.Attribute.Relation<'manyToMany', 'api::feature.feature'>;
+    images: Schema.Attribute.Media<'images', true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
