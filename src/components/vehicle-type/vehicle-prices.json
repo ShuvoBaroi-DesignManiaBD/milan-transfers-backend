@@ -12,7 +12,7 @@
       "target": "api::vehicle-type.vehicle-type"
     },
     "price": {
-      "type": "integer",
+      "type": "decimal",
       "required": true,
       "default": 5
     },

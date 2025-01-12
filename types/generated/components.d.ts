@@ -126,7 +126,7 @@ export interface VehicleTypeVehiclePrices extends Struct.ComponentSchema {
   };
   attributes: {
     currency: Schema.Attribute.Enumeration<['EUR', 'USD', 'GBP']>;
-    price: Schema.Attribute.Integer &
+    price: Schema.Attribute.Decimal &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<5>;
     vehicle_type: Schema.Attribute.Relation<
