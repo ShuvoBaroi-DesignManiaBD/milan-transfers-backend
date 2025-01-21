@@ -19,7 +19,7 @@ module.exports = (config, { strapi }) => {
     const filteredRoutes = routes.filter(route => {
       const pickupItems = route.pickup || [];
       const dropoffItems = route.dropoff || [];
-
+      
       // Filter pickup items
       const hasMatchingPickup = pickupItems.some(item => {
         if (fromAirport && item.__component === 'route.location' && item.airport) {

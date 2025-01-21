@@ -521,6 +521,10 @@ export interface ApiBookingBooking extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
+    assigned_partner: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::author.author'
+    >;
     big_luggage: Schema.Attribute.Integer &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -533,6 +537,16 @@ export interface ApiBookingBooking extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
+    Booking_Status: Schema.Attribute.Enumeration<
+      ['pending', 'running', 'completed', 'canceled']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'pending'>;
     children_seats: Schema.Attribute.Component<'booking.children-seat', true> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -705,6 +719,13 @@ export interface ApiBookingBooking extends Struct.CollectionTypeSchema {
         };
       }> &
       Schema.Attribute.DefaultTo<'no'>;
+    route: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     ski: Schema.Attribute.Integer &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -712,13 +733,6 @@ export interface ApiBookingBooking extends Struct.CollectionTypeSchema {
         };
       }>;
     small_luggage: Schema.Attribute.Integer &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    title: Schema.Attribute.String &
-      Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -1138,6 +1152,14 @@ export interface ApiVehicleTypeVehicleType extends Struct.CollectionTypeSchema {
         };
       }> &
       Schema.Attribute.DefaultTo<1>;
+    Nr_Of_Small_Luggage: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<0>;
     Number_of_seats: Schema.Attribute.Integer &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{

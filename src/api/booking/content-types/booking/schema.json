@@ -246,7 +246,7 @@
       "default": 1,
       "required": true
     },
-    "title": {
+    "route": {
       "pluginOptions": {
         "i18n": {
           "localized": true
@@ -295,6 +295,27 @@
         }
       },
       "type": "time"
+    },
+    "Booking_Status": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "running",
+        "completed",
+        "canceled"
+      ],
+      "default": "pending",
+      "required": true
+    },
+    "assigned_partner": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::author.author"
     }
   }
 }
