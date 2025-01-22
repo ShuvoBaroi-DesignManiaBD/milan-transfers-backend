@@ -305,12 +305,20 @@
       "type": "enumeration",
       "enum": [
         "pending",
-        "running",
-        "completed",
+        "accepted",
+        "declined",
         "canceled"
       ],
       "default": "pending",
       "required": true
+    },
+    "Comment": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "text"
     }
   }
 }

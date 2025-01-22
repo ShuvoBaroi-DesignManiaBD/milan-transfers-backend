@@ -534,7 +534,7 @@ export interface ApiBookingBooking extends Struct.CollectionTypeSchema {
         };
       }>;
     Booking_Status: Schema.Attribute.Enumeration<
-      ['pending', 'running', 'completed', 'canceled']
+      ['pending', 'accepted', 'declined', 'canceled']
     > &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -544,6 +544,12 @@ export interface ApiBookingBooking extends Struct.CollectionTypeSchema {
       }> &
       Schema.Attribute.DefaultTo<'pending'>;
     children_seats: Schema.Attribute.Component<'booking.children-seat', true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    Comment: Schema.Attribute.Text &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
