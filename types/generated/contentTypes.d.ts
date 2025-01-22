@@ -521,10 +521,6 @@ export interface ApiBookingBooking extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
-    assigned_partner: Schema.Attribute.Relation<
-      'oneToOne',
-      'api::author.author'
-    >;
     big_luggage: Schema.Attribute.Integer &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -702,7 +698,7 @@ export interface ApiBookingBooking extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
-    price: Schema.Attribute.Integer &
+    price: Schema.Attribute.Decimal &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {

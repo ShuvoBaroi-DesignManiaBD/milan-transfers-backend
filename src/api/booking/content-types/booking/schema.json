@@ -242,7 +242,7 @@
           "localized": true
         }
       },
-      "type": "integer",
+      "type": "decimal",
       "default": 1,
       "required": true
     },
@@ -311,11 +311,6 @@
       ],
       "default": "pending",
       "required": true
-    },
-    "assigned_partner": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::author.author"
     }
   }
 }
