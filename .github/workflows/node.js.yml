@@ -70,6 +70,7 @@ jobs:
         DATABASE_SSL=${{ secrets.DATABASE_SSL }}
         DATABASE_FILENAME=${{ secrets.DATABASE_FILENAME }}
         JWT_SECRET=${{ secrets.JWT_SECRET }}
+        SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
         EOF
       working-directory: /home/bergamo-transfers-dashboard/actions-runner/_work/bergamo-transfer-backend/bergamo-transfer-backend
 

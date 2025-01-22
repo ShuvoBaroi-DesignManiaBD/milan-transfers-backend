@@ -132,7 +132,7 @@ module.exports = {
                         - Name: ${result?.firstName} ${result?.lastName}
                         - Email: ${result?.email}
                         - Phone: ${result?.phone}
-                        - Route: ${result?.route}
+                        - Route: ${result?.route || "N/A"}
                         - Vehicle Type: ${result?.vehicle_type}
                         - Price: ${result?.price} EUR
                         - Return Trip: ${result?.returnTrip ? "Yes" : "No"}
