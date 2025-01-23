@@ -64,6 +64,7 @@ module.exports = {
         const { result } = event;
         console.log(result);
 
+        const formattedTime = dayjs(`1970-01-01T${result?.pickupTime}`).format('h:mm A');
         try {
             // if (result?.Booking_Status === "pending") {
             //     // Notification to the customer
@@ -109,7 +110,7 @@ module.exports = {
                         Your booking details:
                         - Booking number: ${result?.id}
                         - Transfer date: ${dayjs(result?.pickupDate).format('MMMM D, YYYY')}
-                        - Time: ${dayjs(result?.pickupTime).format('h:mm A')}
+                        - Time: ${formattedTime}
                         - From: ${result?.pickupLocation}
                         - To: ${result?.dropoffLocation}
                         - Number of passengers: ${result?.passengers}
@@ -140,7 +141,7 @@ module.exports = {
                         - Price: ${result?.price} EUR
                         - Return Trip: ${result?.returnTrip ? "Yes" : "No"}
                         - Pickup Date: ${dayjs(result?.pickupDate).format('MMMM D, YYYY')}
-                        - Pickup Time: ${dayjs(result?.pickupTime).format('h:mm A')}
+                        - Pickup Time: ${formattedTime}
                         - Dropoff Date: ${result?.dropoffDate || "N/A"}
                         - Dropoff Time: ${result?.dropoffTime || "N/A"}
                     `
