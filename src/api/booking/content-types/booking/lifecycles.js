@@ -2,6 +2,9 @@
 //     async afterCreate(event){
 //         const {result} = event;
 //         console.log(result);
+
+const dayjs = require("dayjs");
+
         
 //         try {
 //             if(result?.Booking_Status === "pending"){
@@ -105,8 +108,8 @@ module.exports = {
 
                         Your booking details:
                         - Booking number: ${result?.id}
-                        - Transfer date: ${result?.pickupDate}
-                        - Time: ${result?.pickupTime}
+                        - Transfer date: ${dayjs(result?.pickupDate).format('MMMM D, YYYY')}
+                        - Time: ${dayjs(result?.pickupTime).format('h:mm A')}
                         - From: ${result?.pickupLocation}
                         - To: ${result?.dropoffLocation}
                         - Number of passengers: ${result?.passengers}
@@ -136,8 +139,8 @@ module.exports = {
                         - Vehicle Type: ${result?.vehicle_type}
                         - Price: ${result?.price} EUR
                         - Return Trip: ${result?.returnTrip ? "Yes" : "No"}
-                        - Pickup Date: ${result?.pickupDate}
-                        - Pickup Time: ${result?.pickupTime}
+                        - Pickup Date: ${dayjs(result?.pickupDate).format('MMMM D, YYYY')}
+                        - Pickup Time: ${dayjs(result?.pickupTime).format('h:mm A')}
                         - Dropoff Date: ${result?.dropoffDate || "N/A"}
                         - Dropoff Time: ${result?.dropoffTime || "N/A"}
                     `

@@ -16,6 +16,7 @@
     "@strapi/plugin-users-permissions": "5.3.0",
     "@strapi/provider-email-sendgrid": "^5.8.0",
     "@strapi/strapi": "5.3.0",
+    "dayjs": "^1.11.13",
     "fs-extra": "^10.0.0",
     "mime-types": "^2.1.27",
     "mysql2": "3.9.8",
