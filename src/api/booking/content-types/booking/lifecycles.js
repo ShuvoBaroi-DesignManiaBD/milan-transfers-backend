@@ -64,7 +64,7 @@ module.exports = {
         const { result } = event;
         console.log(result);
 
-        const formattedTime = dayjs(`1970-01-01T${result?.pickupTime}`).format('h:mm A');
+        const formattedTime = dayjs(`${result.pickupDate}T${result.pickupTime}`).format('h:mm A');
         try {
             // if (result?.Booking_Status === "pending") {
             //     // Notification to the customer
@@ -157,7 +157,60 @@ module.exports = {
         const { result } = event;
         console.log(result);
 
+        const formattedTime = dayjs(`${result.pickupDate}T${result.pickupTime}`).format('h:mm A');
+        
         try {
+            if (result?.Booking_Status === "pending") {
+                // Email to the customer
+                await strapi.plugins['email'].services.email.send({
+                    to: result?.email,
+                    from: 'booking@bergamo-transfers.com',
+                    subject: 'Your booking has been made!',
+                    text: `
+                        Dear ${result?.firstName},
+
+                        Thank you for choosing our services!
+
+                        Your booking details:
+                        - Booking number: ${result?.id}
+                        - Transfer date: ${dayjs(result?.pickupDate).format('MMMM D, YYYY')}
+                        - Time: ${formattedTime}
+                        - From: ${result?.pickupLocation}
+                        - To: ${result?.dropoffLocation}
+                        - Number of passengers: ${result?.passengers}
+                        - Additional information: ${result?.Comment || "None"}
+
+                        Next steps:
+                        Your booking has been successfully made and is being processed. You will receive a confirmation from our partner transfer company shortly.
+
+                        If you have any questions, please do not hesitate to contact us using this email address or by calling.
+
+                        Best regards,
+                        Bergamo-transfer.com Team
+                    `
+                });
+
+                // Notification to the admin
+                await strapi.plugins['email'].services.email.send({
+                    to: ["edgars.bomiks@gmail.com", "freelancer.shuvobaroi@gmail.com"],
+                    from: 'booking@bergamo-transfers.com',
+                    subject: `New booking received from ${result?.firstName} ${result?.lastName}`,
+                    text: `
+                        New booking received:
+                        - Name: ${result?.firstName} ${result?.lastName}
+                        - Email: ${result?.email}
+                        - Phone: ${result?.phone}
+                        - Route: ${result?.route || "N/A"}
+                        - Vehicle Type: ${result?.vehicle_type}
+                        - Price: ${result?.price} EUR
+                        - Return Trip: ${result?.returnTrip ? "Yes" : "No"}
+                        - Pickup Date: ${dayjs(result?.pickupDate).format('MMMM D, YYYY')}
+                        - Pickup Time: ${formattedTime}
+                        - Dropoff Date: ${result?.dropoffDate || "N/A"}
+                        - Dropoff Time: ${result?.dropoffTime || "N/A"}
+                    `
+                });
+            }
             // If booking is accepted
             if (result?.Booking_Status === "accepted") {
                 await strapi.plugins['email'].services.email.send({

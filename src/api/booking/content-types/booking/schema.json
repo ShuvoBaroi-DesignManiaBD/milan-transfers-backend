@@ -304,12 +304,13 @@
       },
       "type": "enumeration",
       "enum": [
+        "unpaid",
         "pending",
         "accepted",
         "declined",
         "canceled"
       ],
-      "default": "pending",
+      "default": "unpaid",
       "required": true
     },
     "Comment": {

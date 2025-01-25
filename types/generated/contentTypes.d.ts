@@ -534,7 +534,7 @@ export interface ApiBookingBooking extends Struct.CollectionTypeSchema {
         };
       }>;
     Booking_Status: Schema.Attribute.Enumeration<
-      ['pending', 'accepted', 'declined', 'canceled']
+      ['unpaid', 'pending', 'accepted', 'declined', 'canceled']
     > &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -542,7 +542,7 @@ export interface ApiBookingBooking extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }> &
-      Schema.Attribute.DefaultTo<'pending'>;
+      Schema.Attribute.DefaultTo<'unpaid'>;
     children_seats: Schema.Attribute.Component<'booking.children-seat', true> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
