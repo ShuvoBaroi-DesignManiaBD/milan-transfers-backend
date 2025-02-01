@@ -102,7 +102,8 @@ module.exports = (config, { strapi }) => {
       populate: [
         "pickup", "pickup.airport", "pickup.city", 
         "dropoff", "dropoff.airport", "dropoff.city",
-        "vehicles", "vehicles.vehicle_type.Thumbnail"
+        "vehicles", "vehicles.vehicle_type.Thumbnail",
+        "seo"
       ],
     });
 
