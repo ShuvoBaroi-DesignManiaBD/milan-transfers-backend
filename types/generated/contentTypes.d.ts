@@ -713,6 +713,18 @@ export interface ApiBookingBooking extends Struct.CollectionTypeSchema {
       }> &
       Schema.Attribute.DefaultTo<1>;
     publishedAt: Schema.Attribute.DateTime;
+    return_date: Schema.Attribute.Date &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    return_time: Schema.Attribute.Time &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     returnTrip: Schema.Attribute.Enumeration<['yes', 'no']> &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{

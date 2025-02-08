@@ -126,6 +126,37 @@ module.exports = {
                     `
                 });
 
+                // Email to the customer for the return trip
+                if(result?.Booking_Status === "pending" && result?.returnTrip === "yes"){
+                await strapi.plugins['email'].services.email.send({
+                    to: result?.email,
+                    from: 'booking@bergamo-transfers.com',
+                    subject: 'Your return booking has been made!',
+                    text: `
+                        Dear ${result?.firstName},
+
+                        Thank you for choosing our services!
+
+                        Your return booking details:
+                        - Booking number: ${result?.id}
+                        - Transfer date: ${dayjs(result?.return_date).format('MMMM D, YYYY')}
+                        - Time: ${dayjs(`${result.return_date}T${result.return_time}`).format('h:mm A')}
+                        - From: ${result?.dropoffLocation}
+                        - To: ${result?.pickupLocation}
+                        - Number of passengers: ${result?.passengers}
+                        - Additional information: ${result?.Comment || "None"}
+
+                        Next steps:
+                        Your return booking has been successfully made and is being processed. You will receive a confirmation from our partner transfer company shortly.
+
+                        If you have any questions, please do not hesitate to contact us using this email address or by calling.
+
+                        Best regards,
+                        Bergamo-transfer.com Team
+                    `
+                });
+                }
+
                 // Notification to the admin
                 await strapi.plugins['email'].services.email.send({
                     to: ["edgars.bomiks@gmail.com", "freelancer.shuvobaroi@gmail.com"],
@@ -190,6 +221,37 @@ module.exports = {
                     `
                 });
 
+                // Email to the customer for the return trip
+                if(result?.Booking_Status === "pending" && result?.returnTrip === "yes"){
+                    await strapi.plugins['email'].services.email.send({
+                        to: result?.email,
+                        from: 'booking@bergamo-transfers.com',
+                        subject: 'Your return booking has been made!',
+                        text: `
+                            Dear ${result?.firstName},
+    
+                            Thank you for choosing our services!
+    
+                            Your return booking details:
+                            - Booking number: ${result?.id}
+                            - Transfer date: ${dayjs(result?.return_date).format('MMMM D, YYYY')}
+                            - Time: ${dayjs(`${result.return_date}T${result.return_time}`).format('h:mm A')}
+                            - From: ${result?.dropoffLocation}
+                            - To: ${result?.pickupLocation}
+                            - Number of passengers: ${result?.passengers}
+                            - Additional information: ${result?.Comment || "None"}
+    
+                            Next steps:
+                            Your return booking has been successfully made and is being processed. You will receive a confirmation from our partner transfer company shortly.
+    
+                            If you have any questions, please do not hesitate to contact us using this email address or by calling.
+    
+                            Best regards,
+                            Bergamo-transfer.com Team
+                        `
+                    });
+                    }
+
                 // Notification to the admin
                 await strapi.plugins['email'].services.email.send({
                     to: ["edgars.bomiks@gmail.com", "freelancer.shuvobaroi@gmail.com"],
@@ -211,6 +273,7 @@ module.exports = {
                     `
                 });
             }
+
             // If booking is accepted
             if (result?.Booking_Status === "accepted") {
                 await strapi.plugins['email'].services.email.send({
@@ -218,6 +281,37 @@ module.exports = {
                     from: 'booking@bergamo-transfers.com',
                     subject: 'Congratulations! Your Booking Has Been Confirmed!',
                     text: `Thank you! Your driver has been assigned, and further details will follow.`
+                });
+            }
+
+            // If booking is accepted and return trip
+            if (result?.Booking_Status === "accepted" && result?.returnTrip === "yes") {
+                await strapi.plugins['email'].services.email.send({
+                    to: result?.email,
+                    from: 'booking@bergamo-transfers.com',
+                    subject: 'Congratulations! Your Return Booking Has Been Confirmed!',
+                    text: `Thank you! Your driver has been assigned for the return trip from ${result?.dropoffLocation} to ${result?.pickupLocation}, and further details will follow.`
+                });
+            }
+
+            // If booking is declined and return trip
+            if (result?.Booking_Status === "declined" && result?.returnTrip === "yes") {
+                await strapi.plugins['email'].services.email.send({
+                    to: result?.email,
+                    from: 'booking@bergamo-transfers.com',
+                    subject: 'We’re Sorry, Your Return Booking Has Been Declined',
+                    text: `
+                        Dear ${result?.firstName},
+
+                        Unfortunately, we were unable to confirm your return booking from ${result?.dropoffLocation} to ${result?.pickupLocation} due to unforeseen circumstances.
+
+                        Please feel free to contact us for assistance or to make a new booking.
+
+                        We apologize for any inconvenience caused.
+
+                        Best regards,
+                        Bergamo-transfer.com Team
+                    `
                 });
             }
 
@@ -242,7 +336,7 @@ module.exports = {
             }
 
             // If booking is cancelled
-            if (result?.Booking_Status === "cancelled") {
+            if (result?.Booking_Status === "canceled") {
                 await strapi.plugins['email'].services.email.send({
                     to: result?.email,
                     from: 'booking@bergamo-transfers.com',
@@ -250,7 +344,27 @@ module.exports = {
                     text: `
                         Dear ${result?.firstName},
 
-                        We’re writing to inform you that your booking [Booking Number: ${result?.Booking_Number}] has been cancelled. 
+                        We’re writing to inform you that your booking Booking Number: ${result?.id} has been cancelled. 
+                        If you have any questions or need further assistance, please don't hesitate to contact us.
+
+                        Thank you for considering our services, and we hope to serve you in the future.
+
+                        Best regards,
+                        Bergamo-transfer.com Team
+                    `
+                });
+            }
+
+            // If booking is cancelled and return trip
+            if (result?.Booking_Status === "canceled" && result?.returnTrip === "yes") {
+                await strapi.plugins['email'].services.email.send({
+                    to: result?.email,
+                    from: 'booking@bergamo-transfers.com',
+                    subject: 'Your Return Booking Has Been Cancelled',
+                    text: `
+                        Dear ${result?.firstName},
+
+                        We’re writing to inform you that your return booking Booking Number: ${result?.id} has been cancelled. 
                         If you have any questions or need further assistance, please don't hesitate to contact us.
 
                         Thank you for considering our services, and we hope to serve you in the future.
