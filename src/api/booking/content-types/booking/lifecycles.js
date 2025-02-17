@@ -1,381 +1,319 @@
-// module.exports = {
-//     async afterCreate(event){
-//         const {result} = event;
-//         console.log(result);
-
 const dayjs = require("dayjs");
-
-        
-//         try {
-//             if(result?.Booking_Status === "pending"){
-//                 await strapi.plugins['email'].services.email.send({
-//                     to: result?.email,
-//                     from: 'booking@bergamo-transfers.com',
-//                     subject: 'We have received your booking!',
-//                     text: 'Thanks! We have received your bookings and will get back to you as soon as possible.'
-//                 })
-//                 await strapi.plugins['email'].services.email.send({
-//                     to: ["edgars.bomiks@gmail.com", "freelancer.shuvobaroi@gmail.com"],
-//                     from: 'booking@bergamo-transfers.com',
-//                     subject: `New booking received from ${result?.firstName} ${result?.lastName}`,
-//                     text: `New booking received from ${result?.firstName} ${result?.lastName}. Here are the bookign details:-
-//                     Name: ${result?.firstName} ${result?.lastName}
-//                     Email: ${result?.email}
-//                     Phone: ${result?.phone} 
-//                     Route: ${result?.route}
-//                     Vehicle Type: ${result?.vehicle_type} 
-//                     Price: ${result?.price} 
-//                     Return Trip: ${result?.returnTrip} 
-//                     Pickup Date: ${result?.pickupDate} 
-//                     Pickup Time: ${result?.pickupTime}
-//                     Dropoff Date: ${result?.dropoffDate} 
-//                     Dropoff Time: ${result?.dropoffTime} `
-//                 });
-//             }
-//         } catch (error) {
-//             console.log(error);
-//         }
-//     },
-//     async afterUpdate(event){
-//         const {result} = event;
-//         console.log(result);
-        
-//         try {
-//             if(result?.Booking_Status === "accepted"){
-//                 await strapi.plugins['email'].services.email.send({
-//                     to: result?.email,
-//                     from: 'booking@bergamo-transfers.com',
-//                     subject: 'Congratulations! Your Booking has been Confirmed!',
-//                     text: 'Thanks! We have assigned a driver and will get back to you as soon as possible.'
-//                 })
-//             }
-
-//         } catch (error) {
-//             console.log(error);
-//         }
-//     },
-// }
-
-
 
 
 module.exports = {
     async afterCreate(event) {
-        const { result } = event;
-        console.log(result);
+        let {
+            result
+        } = event;
+        // Fetch the full data, including components
+        result = await strapi.entityService.findOne('api::booking.booking', result.id, {
+            populate: ['children_seats'] // Add other components or relations if needed
+        });
+
+        const users = await strapi.query('admin::user').findMany({
+            select: ['id', 'email', 'firstname', 'lastname'],
+            populate: {
+                roles: {
+                    select: ['name', 'code']
+                }
+            },
+            where: {
+                isActive: true
+            }
+        });
+
+        const partners = users.filter(user => user.roles.some(role => role.name === 'Partner'))?.map(user => user.email);
+
+        // const adminUsers = await strapi.query('users-permissions').find({
+
+        //     populate: ['roles'],
+        //     filters: {
+        //       roles: { $contains: 'administrator' } // Filter for users with 'administrator' role
+        //     }
+        //   });
+
+        // const adminUsers = await strapi.admin.services.user.findMany();
 
         const formattedTime = dayjs(`${result.pickupDate}T${result.pickupTime}`).format('h:mm A');
-        try {
-            // if (result?.Booking_Status === "pending") {
-            //     // Notification to the customer
-            //     await strapi.plugins['email'].services.email.send({
-            //         to: result?.email,
-            //         from: 'booking@bergamo-transfers.com',
-            //         subject: 'We have received your booking!',
-            //         text: `Thank you! We have received your booking and will get back to you soon.`
-            //     });
-
-            //     // Notification to admin
-            //     await strapi.plugins['email'].services.email.send({
-            //         to: ["edgars.bomiks@gmail.com", "freelancer.shuvobaroi@gmail.com"],
-            //         from: 'booking@bergamo-transfers.com',
-            //         subject: `New booking received from ${result?.firstName} ${result?.lastName}`,
-            //         text: `
-            //             New booking details:
-            //             - Name: ${result?.firstName} ${result?.lastName}
-            //             - Email: ${result?.email}
-            //             - Phone: ${result?.phone}
-            //             - Route: ${result?.route}
-            //             - Vehicle Type: ${result?.vehicle_type}
-            //             - Price: ${result?.price}
-            //             - Return Trip: ${result?.returnTrip}
-            //             - Pickup Date: ${result?.pickupDate}
-            //             - Pickup Time: ${result?.pickupTime}
-            //             - Dropoff Date: ${result?.dropoffDate}
-            //             - Dropoff Time: ${result?.dropoffTime}
-            //         `
-            //     });
-            // }
-            if (result?.Booking_Status === "pending") {
-                // Email to the customer
-                await strapi.plugins['email'].services.email.send({
-                    to: result?.email,
-                    from: 'booking@bergamo-transfers.com',
-                    subject: 'Your booking has been made!',
-                    text: `
-                        Dear ${result?.firstName},
-
-                        Thank you for choosing our services!
-
-                        Your booking details:
-                        - Booking number: ${result?.id}
-                        - Transfer date: ${dayjs(result?.pickupDate).format('MMMM D, YYYY')}
-                        - Time: ${formattedTime}
-                        - From: ${result?.pickupLocation}
-                        - To: ${result?.dropoffLocation}
-                        - Number of passengers: ${result?.passengers}
-                        - Additional information: ${result?.Comment || "None"}
-
-                        Next steps:
-                        Your booking has been successfully made and is being processed. You will receive a confirmation from our partner transfer company shortly.
-
-                        If you have any questions, please do not hesitate to contact us using this email address or by calling.
-
-                        Best regards,
-                        Bergamo-transfer.com Team
-                    `
-                });
-
-                // Email to the customer for the return trip
-                if(result?.Booking_Status === "pending" && result?.returnTrip === "yes"){
-                await strapi.plugins['email'].services.email.send({
-                    to: result?.email,
-                    from: 'booking@bergamo-transfers.com',
-                    subject: 'Your return booking has been made!',
-                    text: `
-                        Dear ${result?.firstName},
-
-                        Thank you for choosing our services!
-
-                        Your return booking details:
-                        - Booking number: ${result?.id}
-                        - Transfer date: ${dayjs(result?.return_date).format('MMMM D, YYYY')}
-                        - Time: ${dayjs(`${result.return_date}T${result.return_time}`).format('h:mm A')}
-                        - From: ${result?.dropoffLocation}
-                        - To: ${result?.pickupLocation}
-                        - Number of passengers: ${result?.passengers}
-                        - Additional information: ${result?.Comment || "None"}
-
-                        Next steps:
-                        Your return booking has been successfully made and is being processed. You will receive a confirmation from our partner transfer company shortly.
-
-                        If you have any questions, please do not hesitate to contact us using this email address or by calling.
-
-                        Best regards,
-                        Bergamo-transfer.com Team
-                    `
-                });
-                }
-
-                // Notification to the admin
-                await strapi.plugins['email'].services.email.send({
-                    to: ["edgars.bomiks@gmail.com", "freelancer.shuvobaroi@gmail.com"],
-                    from: 'booking@bergamo-transfers.com',
-                    subject: `New booking received from ${result?.firstName} ${result?.lastName}`,
-                    text: `
-                        New booking received:
-                        - Name: ${result?.firstName} ${result?.lastName}
-                        - Email: ${result?.email}
-                        - Phone: ${result?.phone}
-                        - Route: ${result?.route || "N/A"}
-                        - Vehicle Type: ${result?.vehicle_type}
-                        - Price: ${result?.price} EUR
-                        - Return Trip: ${result?.returnTrip ? "Yes" : "No"}
-                        - Pickup Date: ${dayjs(result?.pickupDate).format('MMMM D, YYYY')}
-                        - Pickup Time: ${formattedTime}
-                        - Dropoff Date: ${result?.dropoffDate || "N/A"}
-                        - Dropoff Time: ${result?.dropoffTime || "N/A"}
-                    `
-                });
-            }
-        } catch (error) {
-            console.error(error);
-        }
+        console.log(result, partners, formattedTime);
+        console.log('flight time ===>', dayjs(result?.flight_arrival_time || result?.flight_departure_time, 'HH:mm:ss.SSS').format('h:mm A'));
     },
-    
 
     async afterUpdate(event) {
-        const { result } = event;
-        console.log(result);
+        let {
+            result,
+            ...rest
+        } = event;
 
+        const indent = (str, spaces = 16) => str.split('\n').map(line => ' '.repeat(spaces) + line).join('\n');
+
+        const users = await strapi.query('admin::user').findMany({
+            select: ['id', 'email', 'firstname', 'lastname'],
+            populate: {
+                roles: {
+                    select: ['name', 'code']
+                }
+            },
+            where: {
+                isActive: true
+            }
+        });
+
+
+        const partners = users.filter(user => user.roles.some(role => role.name === 'Partner'))?.map(user => user.email);
+        console.log(result, partners);
+
+        // Fetch the full data, including related components
+        result = await strapi.entityService.findOne('api::booking.booking', result.id, {
+            populate: ['children_seats']
+        });
+
+        console.log(result, rest);
+
+        // Format pickup time
         const formattedTime = dayjs(`${result.pickupDate}T${result.pickupTime}`).format('h:mm A');
-        
+        const formateTime = (timeString) => {
+            if (!timeString) return 'N/A';
+            const today = dayjs().format('YYYY-MM-DD'); // Get today's date
+            return dayjs(`${today}T${timeString}`).format('h:mm A');
+        };
+
+        // Construct booking details
+        const contactDetails = `- Name: ${result?.firstName || ''} ${result?.lastName || ''}
+        - Phone nr: ${result?.phone || ''}
+        - Email: ${result?.email || ''}`;
+
+        const contactDetailsforPartner = `- Name: ${result?.firstName || ''} ${result?.lastName || ''}
+        - Phone nr: ${result?.phone || ''}
+        `;
+
+        const bookingInfo = `- Number of passengers: ${result?.passengers || 'N/A'}
+        - Children's chairs: ${result?.children_seats.map(seat => `Age ${seat?.age}`).join(', ') || 'N/A'}
+        - Car: ${result?.vehicle_type || 'N/A'}
+        - Price: ${result?.price || 'N/A'}
+        `;
+
+        const luggageSkiAndNotes = `- Small luggage: ${result?.small_luggage || 'N/A'}
+        - Big luggage: ${result?.big_luggage || 'N/A'}
+        - Ski: ${result?.ski || 'N/A'}
+        - Notes: ${result?.Comment || 'N/A'}`;
+
+        const pickupAddress = `- Pick up address: ${result?.pickupAddress || 'N/A'}
+        - Pickup hotel: ${result?.pickupHotel || 'N/A'}
+        - Pickup house: ${result?.pickupHouse || 'N/A'}
+        - Pickup nearby: ${result?.pickupNearby || 'N/A'}`;
+
+        const dropoffAddress = `- Drop off address: ${result?.dropoffAddress || 'N/A'}
+        - Dropoff hotel: ${result?.dropoffHotel || 'N/A'}
+        - Dropoff house: ${result?.dropoffHouse || 'N/A'}
+        - Dropoff nearby: ${result?.dropoffNearby || 'N/A'}`;
+
+        const pickupLocation = result ?.pickupLocation || 'N/A';
+        const dropoffLocation = result ?.dropoffLocation || 'N/A';
+
+        const clientWelcomeMessage = await result?.Booking_Status === "pending" ?
+            `Dear ${result?.firstName},
+        Thank you for your transfer booking. This email confirms that we have received your transfer reservation.` : await result?.Booking_Status === "accepted" && `Dear ${result?.firstName},
+        Thank you for your transfer booking. This email confirms that your transfer reservation is confirmed.`;
+
+        const partnerWelcomeMessage = await result?.Booking_Status === "pending" ? `
+        Dear Partner,
+        You have new reservation. Please confirm asap.` : await result?.Booking_Status === "accepted" && `
+        Dear Partner,
+        Please find clients details for this transfer.`;
+
+        const clientWaitingMessage = pickupLocation.toLowerCase().includes("airport") ?
+            "Driver will wait for you in the arrival zone with your name on board. Waiting time: 1 hour after landing." :
+            "Driver will wait for you in the hotel lobby or very near to your pick-up place. Waiting time: 15 minutes starting from your pick-up time.";
+
+
+        // console.log('flight time ===>', result?.flight_arrival_time, result?.flight_departure_time, dayjs(result?.flight_arrival_time || result?.flight_departure_time, 'HH:mm:ss.SSS').format('h:mm A'), dayjs(result?.flight_arrival_time || result?.flight_departure_time, 'HH:mm:ss.SSS'), dayjs(result?.flight_arrival_time || result?.flight_departure_time));
+        // console.log('flight time 2 ===>', result?.flight_arrival_time, result?.flight_departure_time);
+
+        const generateEmailBody = ({
+            returnTrip = false,
+            sendTo = 'client'
+        }) => {
+            // Indentation helper function
+            const indent = (str, spaces = 16) =>
+                str.split('\n').map(line => ' '.repeat(spaces) + line).join('\n');
+
+            // Define email components
+            const contactDetails = `
+      - Name: ${result?.firstName || ''} ${result?.lastName || ''}
+      - Phone nr: ${result?.phone || ''}
+      - Email: ${result?.email || ''}`;
+
+            const contactDetailsForPartner = `
+      - Name: ${result?.firstName || ''} ${result?.lastName || ''}
+      - Phone nr: ${result?.phone || ''}`;
+
+            const bookingInfo = `
+      - Number of passengers: ${result?.passengers || 'N/A'}
+      - Children's chairs: ${result?.children_seats?.length > 0 
+          ? result.children_seats.map(seat => `Age ${seat?.age}`).join(', ') 
+          : 'N/A'}
+      - Car: ${result?.vehicle_type || 'N/A'}
+      - Price: ${result?.price ? `€${result.price}` : 'N/A'}`;
+
+            const luggageSkiAndNotes = `
+      - Small luggage: ${result?.small_luggage || 'N/A'}
+      - Big luggage: ${result?.big_luggage || 'N/A'}
+      - Ski: ${result?.ski || 'N/A'}
+      - Notes: ${result?.Comment || 'N/A'}`;
+
+            const pickupAddress = `
+      - Pick up address: ${result?.pickupAddress || 'N/A'}
+      - Pickup hotel: ${result?.pickupHotel || 'N/A'}
+      - Pickup house: ${result?.pickupHouse || 'N/A'}
+      - Pickup nearby: ${result?.pickupNearby || 'N/A'}`;
+
+            const dropoffAddress = `
+      - Drop off address: ${result?.dropoffAddress || 'N/A'}
+      - Dropoff hotel: ${result?.dropoffHotel || 'N/A'}
+      - Dropoff house: ${result?.dropoffHouse || 'N/A'}
+      - Dropoff nearby: ${result?.dropoffNearby || 'N/A'}`;
+
+            // Build transfer details
+            const transferDetails = `
+      ${indent(`
+      - Booking number: ${result?.id}
+      ${contactDetails}
+      - Pick up: ${result?.pickupLocation}
+      - Transfer to: ${result?.dropoffLocation}
+      - Pickup date: ${dayjs(result?.pickupDate).format('MMMM D, YYYY')}
+      - Pickup time: ${formattedTime}
+      - Flight Nr: ${result?.arrival_flight_number || result?.departure_flight_number || 'N/A'}
+      - Flight time: ${formateTime(result?.flight_arrival_time || result?.flight_departure_time) || 'N/A'}
+      ${indent(bookingInfo, 0)}
+      ${indent(result?.pickupLocation?.toLowerCase().includes("airport") 
+          ? dropoffAddress 
+          : pickupAddress, 0)}
+      ${indent(luggageSkiAndNotes, 0)}`, 0)}`;
+
+            // Build return details if needed
+            let returnDetails = '';
+            if (returnTrip) {
+                returnDetails = `
+      ${indent(`
+      Departure transfer:
+      - Booking number: ${result?.id}
+      ${indent(contactDetails, 0)}
+      - Pick up: ${result?.dropoffLocation}
+      - Transfer to: ${result?.pickupLocation}
+      - Pickup date: ${dayjs(result?.return_date).format('MMMM D, YYYY')}
+      - Pickup time: ${formateTime(result?.return_time)}
+      ${result?.departure_flight_number ? `- Flight Nr: ${result.departure_flight_number}` : ''}
+      ${result?.flight_departure_time ? `- Flight time: ${formateTime(result?.flight_departure_time)}` : ''}
+      ${indent(!result?.dropoffLocation?.toLowerCase().includes("airport") 
+          ? pickupAddress 
+          : dropoffAddress, 0)}
+      ${indent(luggageSkiAndNotes, 0)}`, 0)}`;
+            }
+
+            // Client template
+            if (sendTo === 'client') {
+                return `
+      ${clientWelcomeMessage}
+      
+      Your booking details:
+      ${transferDetails}
+      ${returnTrip ? returnDetails : ''}
+      
+      ${result?.Booking_Status === "pending" ? `
+      Next steps:
+      Your booking has been successfully made and is being processed. You will receive a confirmation email from our partner transfer company shortly.
+      
+      If you have any questions, please do not hesitate to contact us using this email address.
+      
+      Have a nice trip!
+      
+      Best regards,
+      Bergamo-transfer.com Team` : ''}
+      
+      ${result?.Booking_Status === "accepted" ? `
+      ${clientWaitingMessage}
+      
+      If you have any questions, please do not hesitate to contact us using this email address.
+      
+      Have a nice trip!
+      
+      Best regards,
+      Bergamo-transfer.com Team` : ''}`;
+            }
+
+        // Partner template
+        if (sendTo === 'partner') {
+                return `
+      ${partnerWelcomeMessage}
+      
+      Booking Details:
+      ${transferDetails.replace(contactDetails, contactDetailsForPartner)}
+      ${returnTrip ? returnDetails.replace(contactDetails, contactDetailsForPartner) : ''}
+      
+      ${result?.Booking_Status === "pending" ? `
+      Next steps:
+      Please confirm booking:
+      [Confirmation button] [Cancelation button]` : ''}
+      
+      Thank you for cooperation!
+      Bergamo-transfer.com Team`;
+            }
+
+            return '';
+        };
+
+
         try {
+            // Handle 'pending' status: Send booking received email
             if (result?.Booking_Status === "pending") {
-                // Email to the customer
+
                 await strapi.plugins['email'].services.email.send({
                     to: result?.email,
                     from: 'booking@bergamo-transfers.com',
-                    subject: 'Your booking has been made!',
-                    text: `
-                        Dear ${result?.firstName},
-
-                        Thank you for choosing our services!
-
-                        Your booking details:
-                        - Booking number: ${result?.id}
-                        - Transfer date: ${dayjs(result?.pickupDate).format('MMMM D, YYYY')}
-                        - Time: ${formattedTime}
-                        - From: ${result?.pickupLocation}
-                        - To: ${result?.dropoffLocation}
-                        - Number of passengers: ${result?.passengers}
-                        - Additional information: ${result?.Comment || "None"}
-
-                        Next steps:
-                        Your booking has been successfully made and is being processed. You will receive a confirmation from our partner transfer company shortly.
-
-                        If you have any questions, please do not hesitate to contact us using this email address or by calling.
-
-                        Best regards,
-                        Bergamo-transfer.com Team
-                    `
+                    subject: 'Your airport transfer booking has been made!',
+                    text: generateEmailBody({
+                        sendTo: 'client',
+                        returnTrip: result.returnTrip === "yes"
+                    })
                 });
 
-                // Email to the customer for the return trip
-                if(result?.Booking_Status === "pending" && result?.returnTrip === "yes"){
-                    await strapi.plugins['email'].services.email.send({
-                        to: result?.email,
-                        from: 'booking@bergamo-transfers.com',
-                        subject: 'Your return booking has been made!',
-                        text: `
-                            Dear ${result?.firstName},
-    
-                            Thank you for choosing our services!
-    
-                            Your return booking details:
-                            - Booking number: ${result?.id}
-                            - Transfer date: ${dayjs(result?.return_date).format('MMMM D, YYYY')}
-                            - Time: ${dayjs(`${result.return_date}T${result.return_time}`).format('h:mm A')}
-                            - From: ${result?.dropoffLocation}
-                            - To: ${result?.pickupLocation}
-                            - Number of passengers: ${result?.passengers}
-                            - Additional information: ${result?.Comment || "None"}
-    
-                            Next steps:
-                            Your return booking has been successfully made and is being processed. You will receive a confirmation from our partner transfer company shortly.
-    
-                            If you have any questions, please do not hesitate to contact us using this email address or by calling.
-    
-                            Best regards,
-                            Bergamo-transfer.com Team
-                        `
-                    });
-                    }
-
-                // Notification to the admin
                 await strapi.plugins['email'].services.email.send({
-                    to: ["edgars.bomiks@gmail.com", "freelancer.shuvobaroi@gmail.com"],
+                    to: partners,
                     from: 'booking@bergamo-transfers.com',
-                    subject: `New booking received from ${result?.firstName} ${result?.lastName}`,
-                    text: `
-                        New booking received:
-                        - Name: ${result?.firstName} ${result?.lastName}
-                        - Email: ${result?.email}
-                        - Phone: ${result?.phone}
-                        - Route: ${result?.route || "N/A"}
-                        - Vehicle Type: ${result?.vehicle_type}
-                        - Price: ${result?.price} EUR
-                        - Return Trip: ${result?.returnTrip ? "Yes" : "No"}
-                        - Pickup Date: ${dayjs(result?.pickupDate).format('MMMM D, YYYY')}
-                        - Pickup Time: ${formattedTime}
-                        - Dropoff Date: ${result?.dropoffDate || "N/A"}
-                        - Dropoff Time: ${result?.dropoffTime || "N/A"}
-                    `
+                    subject: 'Your airport transfer booking has been made!',
+                    text: generateEmailBody({
+                        sendTo: 'partner',
+                        returnTrip: result.returnTrip === "yes"
+                    })
                 });
             }
 
-            // If booking is accepted
+            // Handle 'accepted' status: Send booking confirmation email
             if (result?.Booking_Status === "accepted") {
                 await strapi.plugins['email'].services.email.send({
                     to: result?.email,
                     from: 'booking@bergamo-transfers.com',
-                    subject: 'Congratulations! Your Booking Has Been Confirmed!',
-                    text: `Thank you! Your driver has been assigned, and further details will follow.`
+                    subject: 'Your airport transfer booking CONFIRMATION',
+                    text: generateEmailBody({
+                        sendTo: 'client',
+                        returnTrip: result.returnTrip === "yes"
+                    })
                 });
-            }
 
-            // If booking is accepted and return trip
-            if (result?.Booking_Status === "accepted" && result?.returnTrip === "yes") {
                 await strapi.plugins['email'].services.email.send({
-                    to: result?.email,
+                    to: partners,
                     from: 'booking@bergamo-transfers.com',
-                    subject: 'Congratulations! Your Return Booking Has Been Confirmed!',
-                    text: `Thank you! Your driver has been assigned for the return trip from ${result?.dropoffLocation} to ${result?.pickupLocation}, and further details will follow.`
-                });
-            }
-
-            // If booking is declined and return trip
-            if (result?.Booking_Status === "declined" && result?.returnTrip === "yes") {
-                await strapi.plugins['email'].services.email.send({
-                    to: result?.email,
-                    from: 'booking@bergamo-transfers.com',
-                    subject: 'We’re Sorry, Your Return Booking Has Been Declined',
-                    text: `
-                        Dear ${result?.firstName},
-
-                        Unfortunately, we were unable to confirm your return booking from ${result?.dropoffLocation} to ${result?.pickupLocation} due to unforeseen circumstances.
-
-                        Please feel free to contact us for assistance or to make a new booking.
-
-                        We apologize for any inconvenience caused.
-
-                        Best regards,
-                        Bergamo-transfer.com Team
-                    `
-                });
-            }
-
-            // If booking is declined
-            if (result?.Booking_Status === "declined") {
-                await strapi.plugins['email'].services.email.send({
-                    to: result?.email,
-                    from: 'booking@bergamo-transfers.com',
-                    subject: 'We’re Sorry, Your Booking Has Been Declined',
-                    text: `
-                        Dear ${result?.firstName},
-
-                        Unfortunately, we were unable to confirm your booking due to unforeseen circumstances. 
-                        Please feel free to contact us for assistance or to make a new booking.
-
-                        We apologize for any inconvenience caused.
-
-                        Best regards,
-                        Bergamo-transfer.com Team
-                    `
-                });
-            }
-
-            // If booking is cancelled
-            if (result?.Booking_Status === "canceled") {
-                await strapi.plugins['email'].services.email.send({
-                    to: result?.email,
-                    from: 'booking@bergamo-transfers.com',
-                    subject: 'Your Booking Has Been Cancelled',
-                    text: `
-                        Dear ${result?.firstName},
-
-                        We’re writing to inform you that your booking Booking Number: ${result?.id} has been cancelled. 
-                        If you have any questions or need further assistance, please don't hesitate to contact us.
-
-                        Thank you for considering our services, and we hope to serve you in the future.
-
-                        Best regards,
-                        Bergamo-transfer.com Team
-                    `
-                });
-            }
-
-            // If booking is cancelled and return trip
-            if (result?.Booking_Status === "canceled" && result?.returnTrip === "yes") {
-                await strapi.plugins['email'].services.email.send({
-                    to: result?.email,
-                    from: 'booking@bergamo-transfers.com',
-                    subject: 'Your Return Booking Has Been Cancelled',
-                    text: `
-                        Dear ${result?.firstName},
-
-                        We’re writing to inform you that your return booking Booking Number: ${result?.id} has been cancelled. 
-                        If you have any questions or need further assistance, please don't hesitate to contact us.
-
-                        Thank you for considering our services, and we hope to serve you in the future.
-
-                        Best regards,
-                        Bergamo-transfer.com Team
-                    `
+                    subject: `Clients details for reservation nr: ${result?.id}`,
+                    text: generateEmailBody({
+                        sendTo: 'partner',
+                        returnTrip: result.returnTrip === "yes"
+                    })
                 });
             }
         } catch (error) {
-            console.error(error);
+            console.error("Error sending booking confirmation email:", error);
         }
     }
 };
