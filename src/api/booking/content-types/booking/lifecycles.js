@@ -240,7 +240,7 @@ module.exports = {
       Have a nice trip!
       
       Best regards,
-      Bergamo-transfer.com Team` : ''}`;
+      Bergamo-transfers.com Team` : ''}`;
             }
 
         // Partner template
@@ -258,7 +258,7 @@ module.exports = {
       [Confirmation button] [Cancelation button]` : ''}
       
       Thank you for cooperation!
-      Bergamo-transfer.com Team`;
+      Bergamo-transfers.com Team`;
             }
 
             return '';
@@ -310,6 +310,62 @@ module.exports = {
                         sendTo: 'partner',
                         returnTrip: result.returnTrip === "yes"
                     })
+                });
+            }
+
+            if (result?.Booking_Status === "declined") {
+                await strapi.plugins['email'].services.email.send({
+                    to: result?.email,
+                    from: 'booking@bergamo-transfers.com',
+                    subject: `Your transfer booking nr ${result?.id} has been canceled`,
+                    text: 
+`Dear ${result?.firstName},
+Thank you for booking your transfer. Unfortunately, we are unable to process this transfer, so we have to cancel it. The money will be refunded within 3 business days. The receipt depends on how quickly your bank processes the transaction.
+                    
+Have a nice day!
+
+Best regards,
+Bergamo-transfers.com Team`
+                });
+
+                await strapi.plugins['email'].services.email.send({
+                    to: partners,
+                    from: 'booking@bergamo-transfers.com',
+                    subject: `Transfer cancelation for booking nr: ${result?.id}`,
+                    text: 
+`This transfer is canceled by one of the partner.
+Thank you for cooperation!
+                    
+Best regards,
+Bergamo-transfers.com Team`
+                });
+            }
+
+            if (result?.Booking_Status === "canceled") {
+                await strapi.plugins['email'].services.email.send({
+                    to: result?.email,
+                    from: 'booking@bergamo-transfers.com',
+                    subject: `Your transfer booking nr ${result?.id} has been canceled`,
+                    text: 
+`Dear ${result?.firstName},
+Thank you for cancelation your booking nr: ${result?.id} The refund will be processed within 3 business days. The refund will be processed based on the booking/cancellation policy. The receipt depends on how quickly your bank processes the transaction.
+
+Have a nice day!
+                    
+Best regards,
+Bergamo-transfers.com Team`.trim()
+                });
+
+                await strapi.plugins['email'].services.email.send({
+                    to: partners,
+                    from: 'booking@bergamo-transfers.com',
+                    subject: `Transfer cancelation for booking nr: ${result?.id}`,
+                    text: 
+`This transfer is canceled by client.
+Thank you for cooperation!
+
+Best regards,
+Bergamo-transfers.com Team`
                 });
             }
         } catch (error) {
