@@ -35,8 +35,8 @@ jobs:
     - name: Debug User and Permissions
       run: |
         echo "Running as user: $(whoami)"
-        ls -ld /home/bergamo-transfers-dashboard/actions-runner/_work/bergamo-transfer-backend/bergamo-transfer-backend
-        ls -l /home/bergamo-transfers-dashboard/actions-runner/_work/bergamo-transfer-backend/bergamo-transfer-backend
+        ls -ld /home/bergamo-transfers-milan-dash/actions-runner/_work/bergamo-transfers-milan-dash/bergamo-transfers-milan-dash
+        ls -l /home/bergamo-transfers-milan-dash/actions-runner/_work/bergamo-transfers-milan-dash/bergamo-transfers-milan-dash
         
     - uses: actions/checkout@v2
 
@@ -72,11 +72,11 @@ jobs:
         JWT_SECRET=${{ secrets.JWT_SECRET }}
         SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
         EOF
-      working-directory: /home/bergamo-transfers-dashboard/actions-runner/_work/bergamo-transfer-backend/bergamo-transfer-backend
+      working-directory: /home/bergamo-transfers-milan-dash/actions-runner/_work/milan-transfers-backend/milan-transfers-backend
 
     - name: Debug .env File
       run: cat .env
-      working-directory: /home/bergamo-transfers-dashboard/actions-runner/_work/bergamo-transfer-backend/bergamo-transfer-backend
+      working-directory: /home/bergamo-transfers-milan-dash/actions-runner/_work/milan-transfers-backend/milan-transfers-backend
 
     - name: Build
       run: pnpm build
@@ -86,4 +86,4 @@ jobs:
 
     - name: Restart Application
       run: pm2 restart 0
-      working-directory: /home/bergamo-transfers-dashboard/actions-runner/_work/bergamo-transfer-backend/bergamo-transfer-backend
+      working-directory: /home/bergamo-transfers-milan-dash/actions-runner/_work/milan-transfers-backend/milan-transfers-backend
