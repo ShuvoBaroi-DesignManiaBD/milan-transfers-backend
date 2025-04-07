@@ -35,8 +35,8 @@ jobs:
     - name: Debug User and Permissions
       run: |
         echo "Running as user: $(whoami)"
-        ls -ld /home/bergamo-transfers-milan-dash/actions-runner/_work/bergamo-transfers-milan-dash/bergamo-transfers-milan-dash
-        ls -l /home/bergamo-transfers-milan-dash/actions-runner/_work/bergamo-transfers-milan-dash/bergamo-transfers-milan-dash
+        ls -ld /home/bergamo-transfers-milan-dash/actions-runner/_work/milan-transfers-backend/milan-transfers-backend
+        ls -l /home/bergamo-transfers-milan-dash/actions-runner/_work/milan-transfers-backend/milan-transfers-backend
         
     - uses: actions/checkout@v2
 
