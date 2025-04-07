@@ -79,10 +79,10 @@ jobs:
       working-directory: /home/bergamo-transfers-milan-dash/actions-runner/_work/milan-transfers-backend/milan-transfers-backend
 
     - name: Build
-      run: pnpm build
+      run: npm run build
 
-    - name: Install PM2
-      run: pnpm install pm2
+    # - name: Install PM2
+    #   run: npm install pm2
 
     - name: List PM2 Processes
       run: pm2 list
