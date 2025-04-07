@@ -255,7 +255,8 @@ module.exports = {
       ${result?.Booking_Status === "pending" ? `
       Next steps:
       Please confirm booking:
-      [Confirmation button] [Cancelation button]` : ''}
+      For confirmation, please reply to this mail by "Yes, I confirm".
+      For decline, please reply to this mail by "No, I decline" & the reason why you declined.` : ''}
       
       Thank you for cooperation!
       Bergamo-transfers.com Team`;
@@ -282,7 +283,7 @@ module.exports = {
                 await strapi.plugins['email'].services.email.send({
                     to: partners,
                     from: 'booking@bergamo-transfers.com',
-                    subject: 'Your airport transfer booking has been made!',
+                    subject: `You have new transfer reservation nr ${result?.id}`,
                     text: generateEmailBody({
                         sendTo: 'partner',
                         returnTrip: result.returnTrip === "yes"
