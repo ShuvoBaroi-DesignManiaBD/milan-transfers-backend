@@ -82,7 +82,7 @@ jobs:
       run: pnpm build
 
     - name: Install PM2
-      run: pnpm install -g pm2
+      run: pnpm install pm2
 
     - name: List PM2 Processes
       run: pm2 list
