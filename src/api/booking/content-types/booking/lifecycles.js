@@ -230,7 +230,7 @@ module.exports = {
       Have a nice trip!
       
       Best regards,
-      Bergamo-transfer.com Team` : ''}
+      Milan-transfers.com Team` : ''}
       
       ${result?.Booking_Status === "accepted" ? `
       ${clientWaitingMessage}
@@ -240,7 +240,7 @@ module.exports = {
       Have a nice trip!
       
       Best regards,
-      Bergamo-transfers.com Team` : ''}`;
+      Milan-transfers.com Team` : ''}`;
             }
 
         // Partner template
@@ -259,7 +259,7 @@ module.exports = {
       For decline, please reply to this mail by "No, I decline" & the reason why you declined.` : ''}
       
       Thank you for cooperation!
-      Bergamo-transfers.com Team`;
+      Milan-transfers.com Team`;
             }
 
             return '';
@@ -272,7 +272,7 @@ module.exports = {
 
                 await strapi.plugins['email'].services.email.send({
                     to: result?.email,
-                    from: 'booking@bergamo-transfers.com',
+                    from: 'booking@milan-transfers.com',
                     subject: 'Your airport transfer booking has been made!',
                     text: generateEmailBody({
                         sendTo: 'client',
@@ -282,7 +282,7 @@ module.exports = {
 
                 await strapi.plugins['email'].services.email.send({
                     to: partners,
-                    from: 'booking@bergamo-transfers.com',
+                    from: 'booking@milan-transfers.com',
                     subject: `You have new transfer reservation nr ${result?.id}`,
                     text: generateEmailBody({
                         sendTo: 'partner',
@@ -295,7 +295,7 @@ module.exports = {
             if (result?.Booking_Status === "accepted") {
                 await strapi.plugins['email'].services.email.send({
                     to: result?.email,
-                    from: 'booking@bergamo-transfers.com',
+                    from: 'booking@milan-transfers.com',
                     subject: 'Your airport transfer booking CONFIRMATION',
                     text: generateEmailBody({
                         sendTo: 'client',
@@ -305,7 +305,7 @@ module.exports = {
 
                 await strapi.plugins['email'].services.email.send({
                     to: partners,
-                    from: 'booking@bergamo-transfers.com',
+                    from: 'booking@milan-transfers.com',
                     subject: `Clients details for reservation nr: ${result?.id}`,
                     text: generateEmailBody({
                         sendTo: 'partner',
@@ -317,7 +317,7 @@ module.exports = {
             if (result?.Booking_Status === "declined") {
                 await strapi.plugins['email'].services.email.send({
                     to: result?.email,
-                    from: 'booking@bergamo-transfers.com',
+                    from: 'booking@milan-transfers.com',
                     subject: `Your transfer booking nr ${result?.id} has been canceled`,
                     text: 
 `Dear ${result?.firstName},
@@ -326,26 +326,26 @@ Thank you for booking your transfer. Unfortunately, we are unable to process thi
 Have a nice day!
 
 Best regards,
-Bergamo-transfers.com Team`
+Milan-transfers.com Team`
                 });
 
                 await strapi.plugins['email'].services.email.send({
                     to: partners,
-                    from: 'booking@bergamo-transfers.com',
+                    from: 'booking@milan-transfers.com',
                     subject: `Transfer cancelation for booking nr: ${result?.id}`,
                     text: 
 `This transfer is canceled by one of the partner.
 Thank you for cooperation!
                     
 Best regards,
-Bergamo-transfers.com Team`
+Milan-transfers.com Team`
                 });
             }
 
             if (result?.Booking_Status === "canceled") {
                 await strapi.plugins['email'].services.email.send({
                     to: result?.email,
-                    from: 'booking@bergamo-transfers.com',
+                    from: 'booking@milan-transfers.com',
                     subject: `Your transfer booking nr ${result?.id} has been canceled`,
                     text: 
 `Dear ${result?.firstName},
@@ -354,19 +354,19 @@ Thank you for cancelation your booking nr: ${result?.id} The refund will be proc
 Have a nice day!
                     
 Best regards,
-Bergamo-transfers.com Team`.trim()
+Milan-transfers.com Team`.trim()
                 });
 
                 await strapi.plugins['email'].services.email.send({
                     to: partners,
-                    from: 'booking@bergamo-transfers.com',
+                    from: 'booking@milan-transfers.com',
                     subject: `Transfer cancelation for booking nr: ${result?.id}`,
                     text: 
 `This transfer is canceled by client.
 Thank you for cooperation!
 
 Best regards,
-Bergamo-transfers.com Team`
+Milan-transfers.com Team`
                 });
             }
         } catch (error) {
