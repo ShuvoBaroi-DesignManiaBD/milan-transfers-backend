@@ -1068,6 +1068,12 @@ export interface ApiRouteRoute extends Struct.CollectionTypeSchema {
         };
       }> &
       Schema.Attribute.DefaultTo<'1h'>;
+    extra_sections: Schema.Attribute.Component<'shared.extra-section', true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     from_country: Schema.Attribute.Relation<
       'manyToOne',
       'api::country.country'

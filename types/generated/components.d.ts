@@ -45,6 +45,32 @@ export interface RouteLocation extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedButton extends Struct.ComponentSchema {
+  collectionName: 'components_shared_buttons';
+  info: {
+    displayName: 'button';
+  };
+  attributes: {
+    button_text: Schema.Attribute.String & Schema.Attribute.Required;
+    link: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface SharedExtraSection extends Struct.ComponentSchema {
+  collectionName: 'components_shared_extra_sections';
+  info: {
+    description: '';
+    displayName: 'extra_section';
+  };
+  attributes: {
+    Buttons: Schema.Attribute.Component<'shared.button', true>;
+    description: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    heading: Schema.Attribute.String & Schema.Attribute.Required;
+    image: Schema.Attribute.Media<'images'>;
+    sub_heading: Schema.Attribute.String;
+  };
+}
+
 export interface SharedFromLocation extends Struct.ComponentSchema {
   collectionName: 'components_shared_from_locations';
   info: {
@@ -143,6 +169,8 @@ declare module '@strapi/strapi' {
       'route.country': RouteCountry;
       'route.destination': RouteDestination;
       'route.location': RouteLocation;
+      'shared.button': SharedButton;
+      'shared.extra-section': SharedExtraSection;
       'shared.from-location': SharedFromLocation;
       'shared.media': SharedMedia;
       'shared.quote': SharedQuote;

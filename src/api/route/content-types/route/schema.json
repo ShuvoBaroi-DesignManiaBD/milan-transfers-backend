@@ -121,6 +121,16 @@
       },
       "type": "text",
       "required": true
+    },
+    "extra_sections": {
+      "type": "component",
+      "repeatable": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "shared.extra-section"
     }
   }
 }

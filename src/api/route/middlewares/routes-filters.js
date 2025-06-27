@@ -103,7 +103,8 @@ module.exports = (config, { strapi }) => {
         "pickup", "pickup.airport", "pickup.city", 
         "dropoff", "dropoff.airport", "dropoff.city",
         "vehicles", "vehicles.vehicle_type.Thumbnail",
-        "seo"
+        "seo",
+        "extra_sections"
       ],
     });
 
