@@ -54,6 +54,11 @@
       ],
       "default": "active",
       "required": true
+    },
+    "extra_sections": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.extra-section"
     }
   }
 }
