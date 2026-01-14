@@ -75,7 +75,12 @@ jobs:
           DATABASE_SSL=${{ secrets.DATABASE_SSL }}
           DATABASE_FILENAME=${{ secrets.DATABASE_FILENAME }}
           JWT_SECRET=${{ secrets.JWT_SECRET }}
-          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY }}
+          SMTP_HOST=${{ secrets.SMTP_HOST }}
+          SMTP_PORT=${{ secrets.SMTP_PORT }}
+          SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
+          SMTP_SECURE=${{ secrets.SMTP_SECURE }}
           EOF
         working-directory: /home/bergamo-transfers-milan-dash/actions-runner/_work/milan-transfers-backend/milan-transfers-backend
 
