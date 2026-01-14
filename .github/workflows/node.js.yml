@@ -2,9 +2,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
@@ -14,84 +14,84 @@ jobs:
       matrix:
         node-version: [18.x] # Use a valid Node.js version
     env:
-        ADMIN_JWT_SECRET: ${{ secrets.ADMIN_JWT_SECRET }}
-        APP_KEYS: ${{ secrets.APP_KEYS }}
-        API_TOKEN_SALT: ${{ secrets.API_TOKEN_SALT }}
-        PORT: ${{ secrets.PORT }}
-        HOST: ${{ secrets.HOST }}
-        TRANSFER_TOKEN_SALT: ${{ secrets.TRANSFER_TOKEN_SALT }}
-        DATABASE_CLIENT: ${{ secrets.DATABASE_CLIENT }}
-        DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
-        DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
-        DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-        DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
-        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-        DATABASE_SSL: ${{ secrets.DATABASE_SSL }}
-        DATABASE_FILENAME: ${{ secrets.DATABASE_FILENAME }}
-        JWT_SECRET: ${{ secrets.JWT_SECRET }}
-        SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
-        SMTP_HOST: ${{ secrets.SMTP_HOST }}
-        SMTP_PORT: ${{ secrets.SMTP_PORT }}
-        SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
-        SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-        SMTP_SECURE: ${{ secrets.SMTP_SECURE }}
-       
+      ADMIN_JWT_SECRET: ${{ secrets.ADMIN_JWT_SECRET }}
+      APP_KEYS: ${{ secrets.APP_KEYS }}
+      API_TOKEN_SALT: ${{ secrets.API_TOKEN_SALT }}
+      PORT: ${{ secrets.PORT }}
+      HOST: ${{ secrets.HOST }}
+      TRANSFER_TOKEN_SALT: ${{ secrets.TRANSFER_TOKEN_SALT }}
+      DATABASE_CLIENT: ${{ secrets.DATABASE_CLIENT }}
+      DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+      DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+      DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+      DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      DATABASE_SSL: ${{ secrets.DATABASE_SSL }}
+      DATABASE_FILENAME: ${{ secrets.DATABASE_FILENAME }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+      SMTP_HOST: ${{ secrets.SMTP_HOST }}
+      SMTP_PORT: ${{ secrets.SMTP_PORT }}
+      SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+      SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+      SMTP_SECURE: ${{ secrets.SMTP_SECURE }}
+
     steps:
-    - name: Debug User and Permissions
-      run: |
-        echo "Running as user: $(whoami)"
-        ls -ld /home/bergamo-transfers-milan-dash/actions-runner/_work/milan-transfers-backend/milan-transfers-backend
-        ls -l /home/bergamo-transfers-milan-dash/actions-runner/_work/milan-transfers-backend/milan-transfers-backend
-        
-    - uses: actions/checkout@v2
+      - name: Debug User and Permissions
+        run: |
+          echo "Running as user: $(whoami)"
+          ls -ld /home/bergamo-transfers-milan-dash/actions-runner/_work/milan-transfers-backend/milan-transfers-backend
+          ls -l /home/bergamo-transfers-milan-dash/actions-runner/_work/milan-transfers-backend/milan-transfers-backend
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        # cache: 'pnpm'
+      - uses: actions/checkout@v2
 
-    # - name: Install pnpm
-    #   run: npm install -g pnpm
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          # cache: 'pnpm'
 
-    - name: Install Dependencies
-      run: pnpm i
+      # - name: Install pnpm
+      #   run: npm install -g pnpm
 
-    - name: Add .env Variables
-      run: |
-        cat <<EOF > .env
-        ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}
-        APP_KEYS=${{ secrets.APP_KEYS }}
-        API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }}
-        PORT=${{ secrets.PORT }}
-        HOST=${{ secrets.HOST }}
-        TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}
-        DATABASE_CLIENT=${{ secrets.DATABASE_CLIENT }}
-        DATABASE_HOST=${{ secrets.DATABASE_HOST }}
-        DATABASE_PORT=${{ secrets.DATABASE_PORT }}
-        DATABASE_NAME=${{ secrets.DATABASE_NAME }}
-        DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}
-        DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
-        DATABASE_SSL=${{ secrets.DATABASE_SSL }}
-        DATABASE_FILENAME=${{ secrets.DATABASE_FILENAME }}
-        JWT_SECRET=${{ secrets.JWT_SECRET }}
-        SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
-        EOF
-      working-directory: /home/bergamo-transfers-milan-dash/actions-runner/_work/milan-transfers-backend/milan-transfers-backend
+      - name: Install Dependencies
+        run: pnpm i
 
-    - name: Debug .env File
-      run: cat .env
-      working-directory: /home/bergamo-transfers-milan-dash/actions-runner/_work/milan-transfers-backend/milan-transfers-backend
+      - name: Add .env Variables
+        run: |
+          cat <<EOF > .env
+          ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}
+          APP_KEYS=${{ secrets.APP_KEYS }}
+          API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }}
+          PORT=${{ secrets.PORT }}
+          HOST=${{ secrets.HOST }}
+          TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}
+          DATABASE_CLIENT=${{ secrets.DATABASE_CLIENT }}
+          DATABASE_HOST=${{ secrets.DATABASE_HOST }}
+          DATABASE_PORT=${{ secrets.DATABASE_PORT }}
+          DATABASE_NAME=${{ secrets.DATABASE_NAME }}
+          DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}
+          DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
+          DATABASE_SSL=${{ secrets.DATABASE_SSL }}
+          DATABASE_FILENAME=${{ secrets.DATABASE_FILENAME }}
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          EOF
+        working-directory: /home/bergamo-transfers-milan-dash/actions-runner/_work/milan-transfers-backend/milan-transfers-backend
 
-    - name: Build
-      run: pnpm run build
+      - name: Debug .env File
+        run: cat .env
+        working-directory: /home/bergamo-transfers-milan-dash/actions-runner/_work/milan-transfers-backend/milan-transfers-backend
 
-    # - name: Install PM2
-    #   run: npm install pm2
+      - name: Build
+        run: pnpm run build
 
-    - name: List PM2 Processes
-      run: pm2 list
+      # - name: Install PM2
+      #   run: npm install pm2
 
-    - name: Restart Application
-      run: pm2 restart 0
-      working-directory: /home/bergamo-transfers-milan-dash/actions-runner/_work/milan-transfers-backend/milan-transfers-backend
+      - name: List PM2 Processes
+        run: pm2 list
+
+      - name: Restart Application
+        run: pm2 restart 0
+        working-directory: /home/bergamo-transfers-milan-dash/actions-runner/_work/milan-transfers-backend/milan-transfers-backend
