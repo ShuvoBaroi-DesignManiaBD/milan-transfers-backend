@@ -131,6 +131,12 @@
         }
       },
       "component": "shared.extra-section"
+    },
+    "discount": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::discount.discount",
+      "inversedBy": "routes"
     }
   }
 }

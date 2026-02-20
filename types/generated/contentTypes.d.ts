@@ -927,6 +927,38 @@ export interface ApiDestinationDestination extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiDiscountDiscount extends Struct.CollectionTypeSchema {
+  collectionName: 'discounts';
+  info: {
+    displayName: 'discount';
+    pluralName: 'discounts';
+    singularName: 'discount';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    amount_in_percentage: Schema.Attribute.Decimal;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    for_all_routes: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::discount.discount'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    routes: Schema.Attribute.Relation<'oneToMany', 'api::route.route'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiFeatureFeature extends Struct.CollectionTypeSchema {
   collectionName: 'features';
   info: {
@@ -1051,6 +1083,7 @@ export interface ApiRouteRoute extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
+    discount: Schema.Attribute.Relation<'manyToOne', 'api::discount.discount'>;
     distance_km: Schema.Attribute.Decimal &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -1756,6 +1789,7 @@ declare module '@strapi/strapi' {
       'api::city.city': ApiCityCity;
       'api::country.country': ApiCountryCountry;
       'api::destination.destination': ApiDestinationDestination;
+      'api::discount.discount': ApiDiscountDiscount;
       'api::feature.feature': ApiFeatureFeature;
       'api::global.global': ApiGlobalGlobal;
       'api::route.route': ApiRouteRoute;
